@@ -1,9 +1,18 @@
 "use client";
 
+import {
+  FaUser,
+  FaEnvelope,
+  FaPhone,
+  FaLock,
+  FaImage,
+  FaDroplet,
+  FaChevronDown,
+} from "react-icons/fa6";
+
 const RegisterForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const form = e.target;
 
     const formData = {
@@ -19,95 +28,159 @@ const RegisterForm = () => {
   };
 
   const inputClass =
-    "p-2 rounded border-2 bg-white text-black focus:outline-green-300";
+    "w-full pl-10 pr-4 py-2.5 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 text-sm";
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-lg space-y-5">
-      {/* Name */}
-      <div className="flex flex-col space-y-1">
-        <label>Full Name</label>
-        <input
-          type="text"
-          name="name"
-          placeholder="Enter your official name"
-          required
-          className={inputClass}
-        />
+    <div className="w-full max-w-lg p-8 bg-slate-800/80 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-700/50">
+      <div className="mb-6 text-center">
+        <h2 className="text-2xl font-bold text-white tracking-wide">
+          Create an Account
+        </h2>
+        <p className="text-sm text-slate-400 mt-1">
+          Fill in the details below to register
+        </p>
       </div>
 
-      {/* Email + Blood Group */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="flex flex-col space-y-1">
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            required
-            className={inputClass}
-          />
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Name */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+            Full Name
+          </label>
+          <div className="relative flex items-center">
+            <FaUser className="absolute left-3.5 text-slate-400 text-sm pointer-events-none" />
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter your official name"
+              required
+              className={inputClass}
+            />
+          </div>
         </div>
 
-        <div className="flex flex-col space-y-1">
-          <label>Blood Group</label>
-          <select name="bloodgroup" required className={inputClass}>
-            <option value="">Select</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-          </select>
+        {/* Email + Blood Group */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              Email
+            </label>
+            <div className="relative flex items-center">
+              <FaEnvelope className="absolute left-3.5 text-slate-400 text-sm pointer-events-none" />
+              <input
+                type="email"
+                name="email"
+                placeholder="name@example.com"
+                required
+                className={inputClass}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              Blood Group
+            </label>
+            <div className="relative flex items-center">
+              <FaDroplet className="absolute left-3.5 text-slate-400 text-sm pointer-events-none z-10" />
+              <select
+                name="bloodgroup"
+                required
+                className={`${inputClass} appearance-none cursor-pointer pr-10`}
+              >
+                <option value="" className="bg-slate-800">
+                  Select
+                </option>
+                <option value="A+" className="bg-slate-800">
+                  A+
+                </option>
+                <option value="A-" className="bg-slate-800">
+                  A-
+                </option>
+                <option value="B+" className="bg-slate-800">
+                  B+
+                </option>
+                <option value="B-" className="bg-slate-800">
+                  B-
+                </option>
+                <option value="O+" className="bg-slate-800">
+                  O+
+                </option>
+                <option value="O-" className="bg-slate-800">
+                  O-
+                </option>
+                <option value="AB+" className="bg-slate-800">
+                  AB+
+                </option>
+                <option value="AB-" className="bg-slate-800">
+                  AB-
+                </option>
+              </select>
+              <FaChevronDown className="absolute right-3.5 text-slate-400 text-xs pointer-events-none" />
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Contact No + Password */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="flex flex-col space-y-1">
-          <label>Contact Number</label>
-          <input
-            type="tel"
-            name="contactNo"
-            placeholder="01XXXXXXXXX"
-            required
-            className={inputClass}
-          />
+        {/* Contact No + Password */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              Contact Number
+            </label>
+            <div className="relative flex items-center">
+              <FaPhone className="absolute left-3.5 text-slate-400 text-sm pointer-events-none" />
+              <input
+                type="tel"
+                name="contactNo"
+                placeholder="01XXXXXXXXX"
+                required
+                className={inputClass}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              Password
+            </label>
+            <div className="relative flex items-center">
+              <FaLock className="absolute left-3.5 text-slate-400 text-sm pointer-events-none" />
+              <input
+                type="password"
+                name="password"
+                placeholder="••••••••"
+                required
+                className={inputClass}
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="flex flex-col space-y-1">
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="********"
-            required
-            className={inputClass}
-          />
+        {/* Image URL */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+            Profile Image URL
+          </label>
+          <div className="relative flex items-center">
+            <FaImage className="absolute left-3.5 text-slate-400 text-sm pointer-events-none" />
+            <input
+              type="url"
+              name="image"
+              placeholder="https://example.com/image.jpg"
+              className={inputClass}
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Image URL */}
-      <div className="flex flex-col space-y-1">
-        <label>Profile Image URL</label>
-        <input
-          type="url"
-          name="image"
-          placeholder="https://example.com/image.jpg"
-          className={inputClass}
-        />
-      </div>
-
-      {/* Submit */}
-      <button
-        type="submit"
-        className="w-full bg-gray-600 text-white py-2 rounded hover:bg-green-700 transition"
-      >
-        Register
-      </button>
-    </form>
+        {/* Submit */}
+        <button
+          type="submit"
+          className="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-lg shadow-emerald-900/30 active:scale-[0.99] cursor-pointer"
+        >
+          Register Now
+        </button>
+      </form>
+    </div>
   );
 };
 
