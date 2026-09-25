@@ -1,5 +1,9 @@
 "use client";
 
+import { registerUser } from "@/actions/auth/registerUser";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import {
   FaUser,
   FaEnvelope,
@@ -8,11 +12,17 @@ import {
   FaImage,
   FaDroplet,
   FaChevronDown,
+  FaSpinner,
 } from "react-icons/fa6";
 
 const RegisterForm = () => {
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const form = e.target;
 
     const formData = {
@@ -24,14 +34,31 @@ const RegisterForm = () => {
       bloodgroup: form.bloodgroup.value,
     };
 
-    console.log("Submitted Data:", formData);
+    try {
+      const result = await registerUser(formData);
+
+      if (result?.success) {
+        toast.success(result.message || "Registration Successful!");
+        form.reset();
+        // Login page-e redirect korun (dorkar hole change korben)
+        router.push("/");
+      } else {
+        toast.error(result?.message || "Registration failed. Try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputClass =
-    "w-full pl-10 pr-4 py-2.5 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 text-sm";
+    "w-full pl-10 pr-4 py-2.5 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 text-sm disabled:opacity-50";
 
   return (
     <div className="w-full max-w-lg p-8 bg-slate-800/80 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-700/50">
+    
       <div className="mb-6 text-center">
         <h2 className="text-2xl font-bold text-white tracking-wide">
           Create an Account
@@ -54,6 +81,7 @@ const RegisterForm = () => {
               name="name"
               placeholder="Enter your official name"
               required
+              disabled={loading}
               className={inputClass}
             />
           </div>
@@ -72,6 +100,7 @@ const RegisterForm = () => {
                 name="email"
                 placeholder="name@example.com"
                 required
+                disabled={loading}
                 className={inputClass}
               />
             </div>
@@ -86,6 +115,7 @@ const RegisterForm = () => {
               <select
                 name="bloodgroup"
                 required
+                disabled={loading}
                 className={`${inputClass} appearance-none cursor-pointer pr-10`}
               >
                 <option value="" className="bg-slate-800">
@@ -134,6 +164,7 @@ const RegisterForm = () => {
                 name="contactNo"
                 placeholder="01XXXXXXXXX"
                 required
+                disabled={loading}
                 className={inputClass}
               />
             </div>
@@ -150,6 +181,7 @@ const RegisterForm = () => {
                 name="password"
                 placeholder="••••••••"
                 required
+                disabled={loading}
                 className={inputClass}
               />
             </div>
@@ -167,17 +199,26 @@ const RegisterForm = () => {
               type="url"
               name="image"
               placeholder="https://example.com/image.jpg"
+              disabled={loading}
               className={inputClass}
             />
           </div>
         </div>
 
-        {/* Submit */}
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-lg shadow-emerald-900/30 active:scale-[0.99] cursor-pointer"
+          disabled={loading}
+          className="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-lg shadow-emerald-900/30 active:scale-[0.99] cursor-pointer flex items-center justify-center space-x-2 disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Register Now
+          {loading ? (
+            <>
+              <FaSpinner className="animate-spin text-lg" />
+              <span>Registering...</span>
+            </>
+          ) : (
+            <span>Register Now</span>
+          )}
         </button>
       </form>
     </div>

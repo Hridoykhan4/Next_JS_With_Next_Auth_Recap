@@ -10,6 +10,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen relative flex flex-col justify-center items-center gap-5 ">
       <UserCard></UserCard>
+      <LoginButton></LoginButton>
       <div className=" flex gap-5 space-x-4 items-center">
         <FaReact
           size={40}
