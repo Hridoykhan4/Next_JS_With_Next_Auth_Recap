@@ -1,32 +1,55 @@
 "use server";
 
 import { collectionNames, dbConnect } from "@/lib/dbConnect";
-import bcrypt from "bcryptjs"; // bcrypt ba bcryptjs import kore nin
+import bcrypt from "bcryptjs";
 
 export const registerUser = async (payload) => {
   try {
-    const usersCollection = dbConnect(collectionNames.TEST_USER);
+    const { name, email, password, contactNo, bloodgroup, image } =
+      payload || {};
+
+    // Basic Validation Checks
+    if (!name || !email || !password) {
+      return {
+        success: false,
+        message: "Name, email, and password are required.",
+      };
+    }
+
+    if (password.length < 6) {
+      return {
+        success: false,
+        message: "Password must be at least 6 characters long.",
+      };
+    }
+
+    const cleanEmail = email.toLowerCase().trim();
+    const usersCollection =  dbConnect(collectionNames.TEST_USER);
 
     // 1. Check if user already exists
-    const isExist = await usersCollection.findOne({
-      email: payload.email,
-    });
+    const isExist = await usersCollection.findOne({ email: cleanEmail });
 
     if (isExist) {
       return {
         success: false,
         status: 409,
-        message: `${payload.email} already exists`,
+        message: `${cleanEmail} already exists. Please log in instead.`,
       };
     }
 
-    // 2. Hash password with await
-    const hashedPassword = await bcrypt.hash(payload.password, 10);
+    // 2. Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // 3. Construct new user payload safely
     const newUser = {
-      ...payload,
-      password: hashedPassword, // Overwrite plain password with hashed password
+      name: name.trim(),
+      email: cleanEmail,
+      contactNo: contactNo?.trim() || "",
+      bloodgroup: bloodgroup || "",
+      image:
+        image?.trim() ||
+        "https://i.pinimg.com/236x/7d/ae/3e/7dae3e223e980afe8b47a4f9c085782a.jpg", // Default avatar fallback
+      password: hashedPassword,
       role: "user",
       createdAt: new Date().toISOString(),
     };
@@ -37,20 +60,20 @@ export const registerUser = async (payload) => {
     if (result.acknowledged) {
       return {
         success: true,
-        message: `Successfully Registered: ${payload.name}`,
+        message: `Successfully registered ${newUser.name}!`,
         insertedId: result.insertedId.toString(),
       };
-    } else {
-      return {
-        success: false,
-        message: "Something went wrong. Please try again.",
-      };
     }
+
+    return {
+      success: false,
+      message: "Failed to register user. Please try again.",
+    };
   } catch (err) {
     console.error("Register Error:", err);
     return {
       success: false,
-      message: "Internal Server Error",
+      message: "Internal server error. Please try again later.",
     };
   }
 };
