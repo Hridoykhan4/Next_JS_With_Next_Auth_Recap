@@ -23,7 +23,7 @@ const ForbiddenPage = () => {
                         Access Denied
                     </h1>
                     <p className="text-sm text-slate-400">
-                        You don't have permission to access this page. Please contact an administrator if you believe this is a mistake.
+                        You don&apos;t have permission to access this page. Please contact an administrator if you believe this is a mistake.
                     </p>
                 </div>
 
